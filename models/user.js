@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type: DataTypes.ENUM('participant', 'professionnel', 'admin')
     },
-    organization: DataTypes.STRING
+    organization: DataTypes.STRING,
+    address: DataTypes.STRING, // Assurez-vous d'inclure tous les champs nécessaires
+    siret: DataTypes.STRING,
+    description: DataTypes.TEXT
   });
 
   return User;
