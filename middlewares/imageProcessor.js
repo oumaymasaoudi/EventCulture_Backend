@@ -1,28 +1,32 @@
-// middlewares/imageProcessor.js
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
 const processImage = async (req, res, next) => {
   try {
-    if (!req.file) {
-      return next(); // aucune image envoyée
-    }
+    if (!req.file) return next(); // Aucune image à traiter
 
     const inputPath = req.file.path;
     const outputFilename = 'processed-' + req.file.filename + '.jpg';
     const outputPath = path.join('uploads', outputFilename);
 
+    // ✅ Traitement image avec Sharp
     await sharp(inputPath)
-      .resize(500, 500, { fit: 'cover' }) // carré 500x500 en cropant proprement
+      .resize(500, 500, { fit: 'cover' })
       .toFormat('jpeg')
       .jpeg({ quality: 80 })
       .toFile(outputPath);
 
-    // On supprime l'image d'origine (non traitée)
-    fs.unlinkSync(inputPath);
+    // ✅ Suppression sécurisée du fichier temporaire
+    fs.access(inputPath, fs.constants.F_OK, (err) => {
+      if (!err) {
+        fs.unlink(inputPath, (err) => {
+          if (err) console.warn("Impossible de supprimer l'image originale :", err.message);
+        });
+      }
+    });
 
-    // On modifie req.file pour qu'il pointe vers la nouvelle image
+    // ✅ Remplacer par le nouveau nom
     req.file.filename = outputFilename;
     req.file.path = outputPath;
 

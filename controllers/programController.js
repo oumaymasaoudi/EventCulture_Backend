@@ -32,15 +32,35 @@ const createProgram = async (req, res) => {
 // 👉 Obtenir tous les programmes
 const getAllPrograms = async (req, res) => {
   try {
+    const { Program, Event, Lieu } = require('../models');
+
     const programs = await Program.findAll({
-      order: [['date', 'ASC'], ['start_time', 'ASC']]
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          required: true, // ❗important pour forcer la jointure
+          attributes: ['id', 'title', 'description'],
+          include: [
+            {
+              model: Lieu,
+              as: 'lieu',
+              attributes: ['nom']
+            }
+          ]
+        }
+      ],
+      order: [['event_id', 'ASC'], ['date', 'ASC'], ['start_time', 'ASC']]
     });
+
     res.json(programs);
   } catch (error) {
     console.error('Erreur récupération programs:', error);
     res.status(500).json({ error: 'Erreur serveur.' });
   }
 };
+
+
 
 // 👉 Obtenir les programmes par event_id
 const getProgramsByEvent = async (req, res) => {
@@ -110,6 +130,8 @@ const deleteProgram = async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur.' });
   }
 };
+
+
 
 // 👉 Export des fonctions
 module.exports = {
