@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     Parcours.hasMany(models.Site, { foreignKey: 'parcours_id', as: 'Sites' });
     Parcours.belongsTo(models.User, { foreignKey: 'user_id' });
     Parcours.belongsTo(models.Lieu, { foreignKey: 'lieu_id' });
-    // si tu utilises la table de liaison :
+
 
   };
 

@@ -116,4 +116,20 @@ exports.deleteSite = async (req, res) => {
     console.error("Erreur suppression site:", error);
     res.status(500).json({ message: "Erreur lors de la suppression du site" });
   }
+
+};
+
+// GET Sites by parcours_id
+exports.getSitesByParcoursId = async (req, res) => {
+  try {
+    const parcoursId = req.params.id;
+    const sites = await Site.findAll({
+      where: { parcours_id: parcoursId }
+    });
+
+    res.json(sites);
+  } catch (error) {
+    console.error("Erreur récupération sites du parcours :", error);
+    res.status(500).json({ message: "Erreur lors de la récupération des sites du parcours" });
+  }
 };

@@ -62,10 +62,14 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Site.associate = (models) => {
-    Site.belongsTo(models.Lieu, { foreignKey: 'lieu_id' });
-    Site.belongsTo(models.User, { foreignKey: 'user_id' });
-    Site.belongsTo(models.Parcours, { foreignKey: 'parcours_id' });
-  };
+  Site.belongsTo(models.Lieu, { foreignKey: 'lieu_id' });
+  Site.belongsTo(models.User, { foreignKey: 'user_id' });
+  Site.belongsTo(models.Parcours, {
+    foreignKey: 'parcours_id',
+    as: 'parcours'
+  });
+};
+
 
   return Site;
 };
