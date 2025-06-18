@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false, // obligatoire pour savoir qui a créé le site
     },
+
+      image: {
+        type: DataTypes.STRING,
+       allowNull: false,}
   });
 
   Site.associate = (models) => {

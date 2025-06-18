@@ -13,8 +13,8 @@ exports.getAllEvents = async (req, res) => {
         'date_start',
         'date_end',
         'price',
-        'image_url',
-        'lieu_id'
+        'lieu_id',
+        'image', 
       ],
       include: [
         {
@@ -45,8 +45,8 @@ exports.getEventById = async (req, res) => {
         'date_start',
         'date_end',
         'price',
-        'image_url',
-        'lieu_id'
+        'lieu_id',
+        'image'
       ],
       include: [
         {
@@ -75,15 +75,22 @@ exports.getEventById = async (req, res) => {
 // CREATE
 exports.createEvent = async (req, res) => {
   try {
-    const { title, description, category, date_start, date_end, price, image_url, lieu_id } = req.body;
+    const {
+      title,
+      description,
+      category,
+      date_start,
+      date_end,
+      price,
+      lieu_id
+    } = req.body;
 
-
-    const user_id = req.user?.id; // ✅ Récupération du user connecté via le middleware d’authentification
-
-    
+    const user_id = req.user?.id;
     if (!user_id) {
       return res.status(401).json({ message: 'Utilisateur non authentifié' });
     }
+
+    const image = req.file ? req.file.filename : null;
 
     const event = await Event.create({
       title,
@@ -92,9 +99,9 @@ exports.createEvent = async (req, res) => {
       date_start,
       date_end,
       price,
-      image_url,
       lieu_id,
-      user_id
+      user_id,
+      image
     });
 
     res.status(201).json(event);
@@ -177,7 +184,7 @@ exports.getEventsByUser = async (req, res) => {
 
     const events = await Event.findAll({
       where: { user_id },
-      order: [['date_start', 'ASC']]   // ✅ corriger ici
+      order: [['date_start', 'ASC']] 
     });
 
     res.json(events);

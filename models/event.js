@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     date_start: DataTypes.DATE,
     date_end: DataTypes.DATE,
     price: DataTypes.DECIMAL,
-    image_url: DataTypes.STRING,
+  image: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
     lieu_id: DataTypes.INTEGER
   }, {
@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   // ✅ Association → très important
   Event.associate = (models) => {
     Event.belongsTo(models.Lieu, { foreignKey: 'lieu_id', as: 'lieu' });
+     Event.hasMany(models.Program, { foreignKey: 'event_id', as: 'programs' });
   };
 
   return Event;
