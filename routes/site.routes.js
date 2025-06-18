@@ -31,4 +31,7 @@ router.delete('/:id', verifyToken, siteController.deleteSite);
 router.get('/', siteController.getAllSites);
 router.get('/:id', siteController.getSiteById);
 
+router.get('/by-parcours/:id', siteController.getSitesByParcoursId);
+
+
 module.exports = router;

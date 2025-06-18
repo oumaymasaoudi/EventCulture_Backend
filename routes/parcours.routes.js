@@ -24,6 +24,8 @@ const processImage = require('../middlewares/imageProcessor');
 
 router.post('/create', upload.single('image'), processImage, parcoursController.createParcours);
 
+router.get('/event/:eventId', parcoursController.getParcoursByEvent);
+
 
 // GET BY ID
 router.get('/:id', parcoursController.getParcoursById);

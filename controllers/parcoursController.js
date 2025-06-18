@@ -1,4 +1,4 @@
-const { Parcours, Lieu } = require('../models');
+const { Parcours, Lieu, Site } = require('../models');
 const path = require('path');
 
 // CREATE PARCOURS AVEC IMAGE
@@ -135,3 +135,22 @@ exports.deleteParcours = async (req, res) => {
     res.status(500).json({ message: "Erreur lors de la suppression du parcours" });
   }
 };
+
+
+
+
+exports.getParcoursByEvent = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const parcours = await Parcour.findAll({
+      where: { id_event: eventId },
+      include: [{ model: Site, as: 'sites' }],
+    });
+
+    res.status(200).json(parcours);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des parcours :", error);
+    res.status(500).json({ message: "Erreur serveur lors du chargement des parcours" });
+  }
+};
+
