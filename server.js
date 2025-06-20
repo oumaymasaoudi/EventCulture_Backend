@@ -37,6 +37,16 @@ const programRoutes = require('./routes/program.routes');
 const siteRoutes = require('./routes/site.routes');
 const lieuRoutes = require('./routes/lieu.routes');
 
+const paymentRoutes = require('./routes/payment');
+app.use('/api/payment', paymentRoutes);
+
+
+const favorisRoutes = require('./routes/favoris.routes');
+app.use('/api/favoris', favorisRoutes);
+
+
+
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

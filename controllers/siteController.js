@@ -1,32 +1,51 @@
 const { Site } = require('../models');
+ // si tu n’as pas encore ajouté node-fetch
+async function getCoordinatesFromAdresse(adresse) {
+  const response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(adresse)}&lang=fr`);
+  const data = await response.json();
+
+  if (!data.features || data.features.length === 0) {
+    throw new Error("Adresse introuvable pour la géolocalisation.");
+  }
+
+  const [longitude, latitude] = data.features[0].geometry.coordinates;
+  return { latitude, longitude };
+}
+
 
 
 // CREATE Site
 exports.createSite = async (req, res) => {
   try {
-   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
-const site = await Site.create({
-  name: req.body.name,
-  categorie: req.body.categorie,
-  description: req.body.description,
-  adresse: req.body.adresse,
-  heure_ouverture: req.body.heure_ouverture,
-  tarif: req.body.tarif,
-  telephone: req.body.telephone,
-  email: req.body.email,
-  site_web: req.body.site_web,
-  services: req.body.services,
-  image: imagePath, // ✅ corrige ici
-  transport: req.body.transport,
-  periode_historique: req.body.periode_historique,
-  style_architectural: req.body.style_architectural,
-  points_interet: req.body.points_interet,
-  lieu_id: req.body.lieu_id,
-  parcours_id: req.body.parcours_id,
-  user_id: req.body.user_id, // ❗ Assure-toi que ça arrive dans FormData
-});
+    // 🔁 Appel API de géocodage Photon
+    const { latitude, longitude } = await getCoordinatesFromAdresse(req.body.adresse);
 
+    const site = await Site.create({
+      name: req.body.name,
+      categorie: req.body.categorie,
+      description: req.body.description,
+      adresse: req.body.adresse,
+      heure_ouverture: req.body.heure_ouverture,
+      tarif: req.body.tarif,
+      telephone: req.body.telephone,
+      email: req.body.email,
+      site_web: req.body.site_web,
+      services: req.body.services,
+      image: imagePath,
+      transport: req.body.transport,
+      periode_historique: req.body.periode_historique,
+      style_architectural: req.body.style_architectural,
+      points_interet: req.body.points_interet,
+      lieu_id: req.body.lieu_id,
+      parcours_id: req.body.parcours_id,
+      user_id: req.body.user_id,
+
+      // ✅ Latitude / Longitude récupérées automatiquement
+      latitude,
+      longitude
+    });
 
     res.status(201).json(site);
   } catch (error) {
@@ -34,6 +53,7 @@ const site = await Site.create({
     res.status(500).json({ message: "Erreur lors de la création du site" });
   }
 };
+
 
 // UPDATE Site
 exports.updateSite = async (req, res) => {

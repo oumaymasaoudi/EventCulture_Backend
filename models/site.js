@@ -4,72 +4,55 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    categorie: {
-      type: DataTypes.STRING,
+    categorie: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    adresse: DataTypes.STRING,
+    latitude: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
-    description: {
-      type: DataTypes.TEXT,
+    longitude: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
-    adresse: {
-      type: DataTypes.STRING,
-    },
-    heure_ouverture: {
-      type: DataTypes.STRING,
-    },
-    tarif: {
-      type: DataTypes.STRING,
-    },
-    telephone: {
-      type: DataTypes.STRING,
-    },
-    email: {
-      type: DataTypes.STRING,
-    },
-    site_web: {
-      type: DataTypes.STRING,
-    },
-    services: {
-      type: DataTypes.TEXT, // JSON.stringify d’un tableau dans controller
-    },
-    transport: {
-      type: DataTypes.STRING,
-    },
-    periode_historique: {
-      type: DataTypes.STRING,
-    },
-    style_architectural: {
-      type: DataTypes.STRING,
-    },
-    points_interet: {
-      type: DataTypes.TEXT,
-    },
+    heure_ouverture: DataTypes.STRING,
+    tarif: DataTypes.STRING,
+    telephone: DataTypes.STRING,
+    email: DataTypes.STRING,
+    site_web: DataTypes.STRING,
+    services: DataTypes.TEXT,
+    transport: DataTypes.STRING,
+    periode_historique: DataTypes.STRING,
+    style_architectural: DataTypes.STRING,
+    points_interet: DataTypes.TEXT,
     lieu_id: {
       type: DataTypes.INTEGER,
-      allowNull: true, // facultatif car tu ne veux plus le champ dans le form
+      allowNull: true,
     },
     parcours_id: {
       type: DataTypes.INTEGER,
-      allowNull: true, // facultatif
+      allowNull: true,
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false, // obligatoire pour savoir qui a créé le site
+      allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
 
-      image: {
-        type: DataTypes.STRING,
-       allowNull: false,}
+    
   });
 
   Site.associate = (models) => {
-  Site.belongsTo(models.Lieu, { foreignKey: 'lieu_id' });
-  Site.belongsTo(models.User, { foreignKey: 'user_id' });
-  Site.belongsTo(models.Parcours, {
-    foreignKey: 'parcours_id',
-    as: 'parcours'
-  });
-};
-
+    Site.belongsTo(models.Lieu, { foreignKey: 'lieu_id' });
+    Site.belongsTo(models.User, { foreignKey: 'user_id' });
+    Site.belongsTo(models.Parcours, {
+      foreignKey: 'parcours_id',
+      as: 'parcours'
+    });
+  };
 
   return Site;
 };

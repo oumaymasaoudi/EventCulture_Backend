@@ -1,7 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/db');
+const favoris = require('./favoris');
 
 const sequelize = db;
+
+
 
 // Import des modèles
 const User = require('./user')(sequelize, DataTypes);
@@ -13,6 +16,7 @@ const Site = require('./site')(sequelize, DataTypes);
 const Program = require('./program')(sequelize, DataTypes);
 const ParcoursSite = require('./parcoursSite')(sequelize, DataTypes); // 🆕
 const Lieu = require('./lieu')(sequelize, DataTypes);
+const Favori = require('./favoris')(sequelize, DataTypes); 
 
 
 db.User = User;
@@ -24,6 +28,7 @@ db.Site = Site;
 db.Program = Program;
 db.ParcoursSite = ParcoursSite;
 db.Lieu = Lieu;
+db.Favori = Favori;
 
 
 /* ===========================
@@ -87,6 +92,24 @@ Program.belongsTo(Event, { foreignKey: 'event_id' });
 Site.hasMany(Program, { foreignKey: 'site_id' });
 Program.belongsTo(Site, { foreignKey: 'site_id' });
 
+
+// Favoris
+User.hasMany(Favori, { foreignKey: 'userId' });
+Favori.belongsTo(User, { foreignKey: 'userId' });
+
+Program.hasMany(Favori, { foreignKey: 'programId' });
+Favori.belongsTo(Program, { foreignKey: 'programId' });
+
+Event.hasMany(Favori, { foreignKey: 'eventId' });
+Favori.belongsTo(Event, { foreignKey: 'eventId' });
+
+Site.hasMany(Favori, { foreignKey: 'siteId' });
+
+
+
+
+
+
 /* ===========================
    Export des modèles
    =========================== */
@@ -100,5 +123,6 @@ module.exports = {
   Site,
   Program,
   ParcoursSite,
-  Lieu
+  Lieu,
+  Favori
 };

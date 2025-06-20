@@ -27,6 +27,7 @@ router.post('/', verifyToken, upload.single('image'), siteController.createSite)
 router.put('/:id', verifyToken, siteController.updateSite);
 router.delete('/:id', verifyToken, siteController.deleteSite);
 
+
 // GET all et GET by id → pas protégé, sauf si tu veux le faire :
 router.get('/', siteController.getAllSites);
 router.get('/:id', siteController.getSiteById);

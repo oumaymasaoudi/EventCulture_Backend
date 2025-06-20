@@ -1,12 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/participationController');
+const participationController = require('../controllers/participationController');
+const multer = require('multer');
+const path = require('path');
 
-router.get('/participants', controller.getParticipants); // ajouter cette ligne
-router.get('/', controller.getAllParticipations);
-router.get('/:id', controller.getParticipationById);
-router.post('/', controller.createParticipation);
-router.put('/:id', controller.updateParticipation);
-router.delete('/:id', controller.deleteParticipation);
+// stockage des images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
+
+// routes
+router.post('/', upload.array('oeuvres_images'), participationController.createParticipationWithUpload);
+router.get('/', participationController.getAllParticipations);
+
+router.put('/:id', participationController.updateParticipation);
 
 module.exports = router;

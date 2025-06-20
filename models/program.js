@@ -13,11 +13,19 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Programs',
   });
 
-  // ✅ Ajouter cette méthode pour activer les relations
+ 
   Program.associate = (models) => {
   Program.belongsTo(models.Event, { foreignKey: 'event_id', as: 'event' });
   Program.belongsTo(models.Site, { foreignKey: 'site_id', as: 'site' });
+
+  if (models.Favoris) {
+    Program.hasMany(models.Favoris, {
+      foreignKey: 'programId',
+      as: 'Favoris'
+    });
+  }
 };
+
 
 
   return Program;
