@@ -24,7 +24,8 @@ const { verifyToken } = require('../middlewares/authMiddleware');
 
 // ici on protège les routes POST, PUT, DELETE
 router.post('/', verifyToken, upload.single('image'), siteController.createSite);
-router.put('/:id', verifyToken, siteController.updateSite);
+router.put('/:id', verifyToken, upload.single('image'), siteController.updateSite);
+
 router.delete('/:id', verifyToken, siteController.deleteSite);
 
 

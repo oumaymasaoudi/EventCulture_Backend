@@ -17,7 +17,7 @@ async function getCoordinatesFromAdresse(adresse) {
 // CREATE Site
 exports.createSite = async (req, res) => {
   try {
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+  const imagePath = req.file ? req.file.filename : null;
 
     // 🔁 Appel API de géocodage Photon
     const { latitude, longitude } = await getCoordinatesFromAdresse(req.body.adresse);
@@ -75,7 +75,8 @@ exports.updateSite = async (req, res) => {
       email: req.body.email,
       site_web: req.body.site_web,
       services: req.body.services,
-      image: req.body.image, // ✅ pas besoin de req.file ni parcours.image
+    image: req.file ? req.file.filename : site.image,
+
       transport: req.body.transport,
       periode_historique: req.body.periode_historique,
       style_architectural: req.body.style_architectural,
